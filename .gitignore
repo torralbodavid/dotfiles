@@ -1,0 +1,12 @@
+# No subir el .gitconfig generado (contiene datos personales)
+configs/.gitconfig
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Temporal generado por install.sh
+Brewfile.tmp

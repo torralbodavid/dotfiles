@@ -1,0 +1,11 @@
+*~
+.DS_Store
+.idea
+public/public/cache
+public/cache
+storage/debugbar
+public/assets
+.phpunit.result.cache
+composer.phar
+bower_components
+.nvmrc
