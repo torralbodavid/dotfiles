@@ -1,66 +1,66 @@
 #!/usr/bin/env bash
 # ============================================================
 # macOS Defaults
-# Configuración de preferencias del sistema
+# System preferences configuration
 # ============================================================
 
 set -euo pipefail
 
 echo ""
-echo "⚙️  Aplicando configuración de macOS..."
+echo "⚙️  Applying macOS configuration..."
 echo ""
 
 # ------- Finder -------
 
-# Mostrar archivos ocultos en Finder
+# Show hidden files in Finder
 defaults write com.apple.finder AppleShowAllFiles -bool true
-echo "  ✅ Finder: archivos ocultos visibles"
+echo "  ✅ Finder: hidden files are now visible"
 
-# Mostrar extensiones de archivo siempre
+# Always show file extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-echo "  ✅ Finder: extensiones de archivo visibles"
+echo "  ✅ Finder: file extensions are now visible"
 
 # ------- Trackpad -------
 
-# Trackpad: activar click con un toque
+# Trackpad: tap to click
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-echo "  ✅ Trackpad: tap-to-click activado"
+echo "  ✅ Trackpad: tap-to-click enabled"
 
 # ------- Dock -------
 
-# Dock: tamaño de iconos
+# Dock: icon size
 defaults write com.apple.dock tilesize -int 48
-echo "  ✅ Dock: tamaño de iconos = 48"
+echo "  ✅ Dock: icon size set to 48"
 
-# Dock: posición abajo
+# Dock: position bottom
 defaults write com.apple.dock orientation -string "bottom"
-echo "  ✅ Dock: posición = abajo"
+echo "  ✅ Dock: position set to bottom"
 
-# Dock: ocultación automática
+# Dock: auto-hide
 defaults write com.apple.dock autohide -bool true
-echo "  ✅ Dock: auto-hide activado"
+echo "  ✅ Dock: auto-hide enabled"
 
-# ------- Teclado -------
+# ------- Keyboard -------
 
-# Teclado: repetición rápida
+# Keyboard: fast key repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
-echo "  ✅ Teclado: repetición rápida configurada"
+echo "  ✅ Keyboard: fast repeat rate configured"
 
 # ------- Screenshots -------
 
-# Guardar screenshots en una carpeta específica
+# Save screenshots to a specific folder
 mkdir -p "$HOME/Screenshots"
 defaults write com.apple.screencapture location "$HOME/Screenshots"
-echo "  ✅ Screenshots: se guardarán en ~/Screenshots"
+echo "  ✅ Screenshots: will be saved to ~/Screenshots"
 
-# ------- Reiniciar apps afectadas -------
+# ------- Restart affected apps -------
 
 echo ""
-echo "🔄 Reiniciando Finder y Dock..."
+echo "🔄 Restarting Finder and Dock..."
 killall Finder
 killall Dock
 
 echo ""
-echo "✅ Configuración de macOS aplicada correctamente."
+echo "✅ macOS configuration successfully applied."
 echo ""

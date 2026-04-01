@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================
 # 🚀 Dotfiles Installer
-# Clona el repo → ejecuta este script → Mac listo para trabajar
+# Clones the repo → runs this script → Mac ready to work
 # ============================================================
 
 set -euo pipefail
@@ -11,7 +11,7 @@ BREWFILE="$DOTFILES_DIR/Brewfile"
 BREWFILE_TMP="$DOTFILES_DIR/Brewfile.tmp"
 
 # -------------------------------------------------------
-# Colores
+# Colors
 # -------------------------------------------------------
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -31,7 +31,7 @@ ask()     { echo -e "${CYAN}❓ $1${NC}"; }
 
 ask_yes_no() {
     local prompt="$1"
-    local default="$2"  # "y" o "n"
+    local default="$2"  # "y" or "n"
     local answer
 
     if [[ "$default" == "y" ]]; then
@@ -52,165 +52,158 @@ echo ""
 echo -e "${BOLD}${CYAN}"
 echo "  ╔══════════════════════════════════════════╗"
 echo "  ║        🚀 Dotfiles Installer             ║"
-echo "  ║     Configura tu Mac en un solo paso     ║"
+echo "  ║     Setup your Mac in a single step      ║"
 echo "  ╚══════════════════════════════════════════╝"
 echo -e "${NC}"
 echo ""
 
 # -------------------------------------------------------
-# 1. Instalar Homebrew si no está instalado
+# 1. Install Homebrew if not installed
 # -------------------------------------------------------
 if ! command -v brew &>/dev/null; then
-    info "Homebrew no encontrado. Instalando..."
+    info "Homebrew not found. Installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    # Añadir Homebrew al PATH para Apple Silicon
+    # Add Homebrew to PATH for Apple Silicon
     if [[ "$(uname -m)" == "arm64" ]]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
     fi
 
-    success "Homebrew instalado"
+    success "Homebrew installed"
 else
-    success "Homebrew ya está instalado"
+    success "Homebrew is already installed"
 fi
 
 echo ""
 brew update
-success "Homebrew actualizado"
+success "Homebrew updated"
 echo ""
 
 # -------------------------------------------------------
-# 2. Preguntas interactivas — Apps opcionales
+# 2. Interactive questions — Optional apps
 # -------------------------------------------------------
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}   📦 Configuración de aplicaciones${NC}"
+echo -e "${BOLD}   📦 Application configuration${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# --- API Client: Postman o Insomnia ---
-ask "¿Qué cliente de APIs prefieres? [1] Postman (default) / [2] Insomnia"
+# --- API Client: Postman or Insomnia ---
+ask "Which API client do you prefer? [1] Postman (default) / [2] Insomnia"
 read -r api_client_choice
 api_client_choice="${api_client_choice:-1}"
 
 if [[ "$api_client_choice" == "2" ]]; then
     API_CLIENT="insomnia"
-    info "Se instalará Insomnia"
+    info "Insomnia will be installed"
 else
     API_CLIENT="postman"
-    info "Se instalará Postman"
+    info "Postman will be installed"
 fi
 echo ""
 
 # --- Notion ---
-if ask_yes_no "¿Instalar Notion?" "y"; then
+if ask_yes_no "Install Notion?" "y"; then
     INSTALL_NOTION=true
-    info "Se instalará Notion"
+    info "Notion will be installed"
 else
     INSTALL_NOTION=false
-    warn "Notion no se instalará"
+    warn "Notion will not be installed"
 fi
 echo ""
 
 # --- Rectangle ---
-if ask_yes_no "¿Instalar Rectangle (gestor de ventanas)?" "y"; then
+if ask_yes_no "Install Rectangle (window manager)?" "y"; then
     INSTALL_RECTANGLE=true
-    info "Se instalará Rectangle"
+    info "Rectangle will be installed"
 else
     INSTALL_RECTANGLE=false
-    warn "Rectangle no se instalará"
+    warn "Rectangle will not be installed"
 fi
 echo ""
 
 # --- Sequel Ace ---
-if ask_yes_no "¿Instalar Sequel Ace (cliente MySQL)?" "y"; then
+if ask_yes_no "Install Sequel Ace (MySQL client)?" "y"; then
     INSTALL_SEQUEL_ACE=true
-    info "Se instalará Sequel Ace"
+    info "Sequel Ace will be installed"
 else
     INSTALL_SEQUEL_ACE=false
-    warn "Sequel Ace no se instalará"
+    warn "Sequel Ace will not be installed"
 fi
 echo ""
 
 # --- Warp ---
-if ask_yes_no "¿Instalar Warp (terminal moderno)?" "y"; then
+if ask_yes_no "Install Warp (modern terminal)?" "y"; then
     INSTALL_WARP=true
-    info "Se instalará Warp"
+    info "Warp will be installed"
 else
     INSTALL_WARP=false
-    warn "Warp no se instalará"
+    warn "Warp will not be installed"
 fi
 echo ""
 
-# --- FileZilla (manual, no disponible en Homebrew) ---
-if ask_yes_no "¿Quieres que se abra la web de FileZilla para descargarlo manualmente? (ya no está en Homebrew)" "n"; then
-    OPEN_FILEZILLA=true
-    info "Se abrirá la web de FileZilla al final"
-else
-    OPEN_FILEZILLA=false
-fi
-echo ""
+
 
 # --- Google Chrome Canary ---
-if ask_yes_no "¿Instalar Google Chrome Canary?" "n"; then
+if ask_yes_no "Install Google Chrome Canary?" "n"; then
     INSTALL_CHROME_CANARY=true
-    info "Se instalará Chrome Canary"
+    info "Chrome Canary will be installed"
 else
     INSTALL_CHROME_CANARY=false
-    warn "Chrome Canary no se instalará"
+    warn "Chrome Canary will not be installed"
 fi
 echo ""
 
 # -------------------------------------------------------
-# 3. Generar Brewfile dinámico
+# 3. Generate dynamic Brewfile
 # -------------------------------------------------------
-info "Generando Brewfile personalizado..."
+info "Generating custom Brewfile..."
 
 cp "$BREWFILE" "$BREWFILE_TMP"
 
-# Añadir API Client
+# Add API Client
 echo "cask \"$API_CLIENT\"" >> "$BREWFILE_TMP"
 
-# Añadir opcionales
+# Add optionals
 [[ "$INSTALL_NOTION" == true ]]       && echo 'cask "notion"'              >> "$BREWFILE_TMP"
 [[ "$INSTALL_RECTANGLE" == true ]]    && echo 'cask "rectangle"'           >> "$BREWFILE_TMP"
 [[ "$INSTALL_SEQUEL_ACE" == true ]]   && echo 'cask "sequel-ace"'          >> "$BREWFILE_TMP"
 [[ "$INSTALL_WARP" == true ]]         && echo 'cask "warp"'                >> "$BREWFILE_TMP"
 [[ "$INSTALL_CHROME_CANARY" == true ]] && echo 'cask "google-chrome@canary"' >> "$BREWFILE_TMP"
 
-success "Brewfile personalizado generado"
+success "Custom Brewfile generated"
 echo ""
 
 # -------------------------------------------------------
-# 4. Instalar apps con Homebrew Bundle
+# 4. Install apps with Homebrew Bundle
 # -------------------------------------------------------
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}   🍺 Instalando aplicaciones con Homebrew${NC}"
+echo -e "${BOLD}   🍺 Installing applications with Homebrew${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
 brew bundle --file="$BREWFILE_TMP" --verbose
 
-# Limpiar Brewfile temporal
+# Clean temporary Brewfile
 rm -f "$BREWFILE_TMP"
 
-success "Todas las aplicaciones instaladas"
+success "All applications installed"
 echo ""
 
 # -------------------------------------------------------
-# 5. Configuración de Git
+# 5. Git Configuration
 # -------------------------------------------------------
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}   🔧 Configuración de Git${NC}"
+echo -e "${BOLD}   🔧 Git Configuration${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-ask "¿Cuál es tu nombre completo para Git? (ej: David Torralbo)"
+ask "What is your full name for Git? (e.g. David Torralbo)"
 read -r GIT_NAME
 
-ask "¿Cuál es tu email para Git? (ej: dtorralbo@gnahs.com)"
+ask "What is your email for Git? (e.g. dtorralbo@gnahs.com)"
 read -r GIT_EMAIL
 
-# Generar .gitconfig
+# Generate .gitconfig
 cat > "$DOTFILES_DIR/configs/.gitconfig" <<EOF
 [core]
 	excludesFile = $HOME/.gitignore_global
@@ -219,20 +212,20 @@ cat > "$DOTFILES_DIR/configs/.gitconfig" <<EOF
 	email = $GIT_EMAIL
 EOF
 
-success ".gitconfig generado para $GIT_NAME <$GIT_EMAIL>"
+success ".gitconfig generated for $GIT_NAME <$GIT_EMAIL>"
 echo ""
 
 # -------------------------------------------------------
-# 6. Crear symlinks
+# 6. Create symlinks
 # -------------------------------------------------------
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}   🔗 Creando symlinks${NC}"
+echo -e "${BOLD}   🔗 Creating symlinks${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
 # .zshrc
 if [[ -f "$HOME/.zshrc" ]]; then
-    warn "Ya existe ~/.zshrc — se hará backup en ~/.zshrc.backup"
+    warn "~/.zshrc already exists — backing up to ~/.zshrc.backup"
     cp "$HOME/.zshrc" "$HOME/.zshrc.backup"
 fi
 ln -sf "$DOTFILES_DIR/configs/.zshrc" "$HOME/.zshrc"
@@ -240,7 +233,7 @@ success "~/.zshrc → dotfiles/configs/.zshrc"
 
 # .gitconfig
 if [[ -f "$HOME/.gitconfig" ]]; then
-    warn "Ya existe ~/.gitconfig — se hará backup en ~/.gitconfig.backup"
+    warn "~/.gitconfig already exists — backing up to ~/.gitconfig.backup"
     cp "$HOME/.gitconfig" "$HOME/.gitconfig.backup"
 fi
 ln -sf "$DOTFILES_DIR/configs/.gitconfig" "$HOME/.gitconfig"
@@ -248,7 +241,7 @@ success "~/.gitconfig → dotfiles/configs/.gitconfig"
 
 # .gitignore_global
 if [[ -f "$HOME/.gitignore_global" ]]; then
-    warn "Ya existe ~/.gitignore_global — se hará backup en ~/.gitignore_global.backup"
+    warn "~/.gitignore_global already exists — backing up to ~/.gitignore_global.backup"
     cp "$HOME/.gitignore_global" "$HOME/.gitignore_global.backup"
 fi
 ln -sf "$DOTFILES_DIR/configs/.gitignore_global" "$HOME/.gitignore_global"
@@ -257,37 +250,51 @@ success "~/.gitignore_global → dotfiles/configs/.gitignore_global"
 echo ""
 
 # -------------------------------------------------------
-# 7. Aplicar configuración de macOS
+# 7. Local configuration (.zsh_aliases)
 # -------------------------------------------------------
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}   🍎 Aplicando configuración de macOS${NC}"
+echo -e "${BOLD}   🔒 Local Secrets & Aliases${NC}"
+echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+info "We'll create ~/.zsh_aliases to keep your SSH aliases out of the Git repo."
+ask "List the SSH hostnames you want aliases for, separated by spaces (e.g., 'par01 mia03'), or leave empty:"
+read -r SSH_HOSTS
+
+if [[ -n "$SSH_HOSTS" ]]; then
+    echo "# Custom SSH Aliases" > "$HOME/.zsh_aliases"
+    for host in $SSH_HOSTS; do
+        echo "alias $host='ssh $host'" >> "$HOME/.zsh_aliases"
+    done
+    success "Generated ~/.zsh_aliases successfully"
+else
+    info "Skipping SSH aliases"
+fi
+echo ""
+
+# -------------------------------------------------------
+# 8. Apply macOS setup
+# -------------------------------------------------------
+echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}   🍎 Applying macOS configuration${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
 bash "$DOTFILES_DIR/macos/defaults.sh"
 
 # -------------------------------------------------------
-# 8. FileZilla (descarga manual)
-# -------------------------------------------------------
-if [[ "$OPEN_FILEZILLA" == true ]]; then
-    echo ""
-    info "Abriendo web de FileZilla para descarga manual..."
-    open "https://filezilla-project.org/download.php?platform=osx"
-fi
-
-# -------------------------------------------------------
-# 9. Recargar shell
+# 9. Reload shell
 # -------------------------------------------------------
 echo ""
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}   🎉 ¡Instalación completada!${NC}"
+echo -e "${BOLD}   🎉 Installation completed!${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
-echo -e "  ${GREEN}•${NC} Aplicaciones instaladas via Homebrew"
-echo -e "  ${GREEN}•${NC} Git configurado para ${BOLD}$GIT_NAME${NC}"
-echo -e "  ${GREEN}•${NC} Aliases y funciones en ~/.zshrc"
-echo -e "  ${GREEN}•${NC} Preferencias de macOS aplicadas"
-echo -e "  ${GREEN}•${NC} Screenshots se guardarán en ~/Screenshots"
+echo -e "  ${GREEN}•${NC} Applications installed via Homebrew"
+echo -e "  ${GREEN}•${NC} Git configured for ${BOLD}$GIT_NAME${NC}"
+echo -e "  ${GREEN}•${NC} Aliases and functions added to ~/.zshrc"
+echo -e "  ${GREEN}•${NC} Private SSH aliases saved to ~/.zsh_aliases"
+echo -e "  ${GREEN}•${NC} macOS preferences applied"
+echo -e "  ${GREEN}•${NC} Screenshots will be saved to ~/Screenshots"
 echo ""
-echo -e "${CYAN}Ejecuta ${BOLD}source ~/.zshrc${NC}${CYAN} o abre una nueva terminal para cargar los aliases.${NC}"
+echo -e "${CYAN}Run ${BOLD}source ~/.zshrc${NC}${CYAN} or open a new terminal to load aliases.${NC}"
 echo ""

@@ -1,17 +1,10 @@
 # ============================================================
-# .zshrc - Configuración de shell
-# Gestionado por dotfiles: https://github.com/tu-usuario/dotfiles
+# .zshrc - Shell configuration
+# Managed by dotfiles: https://github.com/tu-usuario/dotfiles
 # ============================================================
 
 # ------- SSH Aliases -------
-alias par01='ssh par01'
-alias par04='ssh par04'
-alias par05='ssh par05'
-alias par06='ssh par06'
-alias par07='ssh par07'
-alias par08='ssh par08'
-alias mia03='ssh mia03'
-alias bp02='ssh bp02'
+# Add your SSH aliases here (make sure they are not tracked in a public repo)
 
 # ------- Laravel / PHP Aliases -------
 alias artisan='php artisan'
@@ -35,7 +28,7 @@ alias ps='open -na "PhpStorm.app" --args'
 
 # ------- Functions -------
 
-# Mata el proceso que esté escuchando en un puerto dado
+# Kills the process running on a given port
 killport() {
     local port=$1
     local pid=$(lsof -ti tcp:$port)
@@ -46,3 +39,8 @@ killport() {
         echo "⚠️ There is no process running in $port port."
     fi
 }
+
+# ------- Local Configuration (Not tracked in Git) -------
+if [[ -f ~/.zsh_aliases ]]; then
+    source ~/.zsh_aliases
+fi
