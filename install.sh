@@ -58,6 +58,19 @@ echo -e "${NC}"
 echo ""
 
 # -------------------------------------------------------
+# Execution Mode
+# -------------------------------------------------------
+if ask_yes_no "Do you want to ONLY apply macOS configuration (skip all app installations and git config)?" "n"; then
+    echo ""
+    info "Running ONLY macOS configuration..."
+    bash "$DOTFILES_DIR/macos/defaults.sh"
+    echo ""
+    success "Done! Exiting."
+    exit 0
+fi
+echo ""
+
+# -------------------------------------------------------
 # 1. Install Homebrew if not installed
 # -------------------------------------------------------
 if ! command -v brew &>/dev/null; then

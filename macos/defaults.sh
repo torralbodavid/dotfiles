@@ -22,9 +22,16 @@ echo "  ✅ Finder: file extensions are now visible"
 
 # ------- Trackpad -------
 
-# Trackpad: tap to click
+# Trackpad: tap to click (globally effective)
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 echo "  ✅ Trackpad: tap-to-click enabled"
+
+# Trackpad: extremely fast tracking speed
+defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3.0
+echo "  ✅ Trackpad: very fast tracking speed configured"
 
 # ------- Dock -------
 
@@ -42,10 +49,14 @@ echo "  ✅ Dock: auto-hide enabled"
 
 # ------- Keyboard -------
 
-# Keyboard: fast key repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 2
-defaults write NSGlobalDomain InitialKeyRepeat -int 15
-echo "  ✅ Keyboard: fast repeat rate configured"
+# Keyboard: disable long press for accents (allows repeating keys like aaaaa)
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+echo "  ✅ Keyboard: press-and-hold disabled (repeating keys enabled)"
+
+# Keyboard: extremely fast key repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
+echo "  ✅ Keyboard: extremely fast repeat rate configured"
 
 # ------- Battery -------
 
