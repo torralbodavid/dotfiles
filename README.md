@@ -5,8 +5,8 @@ Personal macOS configuration setup. Clone, run, and your Mac is ready to work.
 ## ⚡ Quick Start
 
 ```bash
-git clone https://github.com/tu-usuario/dotfiles.git ~/Code/dotfiles
-cd ~/Code/dotfiles
+git clone https://github.com/tu-usuario/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
 chmod +x install.sh
 ./install.sh
 ```
@@ -130,7 +130,7 @@ source ~/.zshrc   # To reload aliases
 
 To re-apply macOS preferences:
 ```bash
-bash ~/Code/dotfiles/macos/defaults.sh
+bash ~/.dotfiles/macos/defaults.sh
 ```
 
 ## 📝 Notes
