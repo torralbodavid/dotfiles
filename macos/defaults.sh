@@ -47,6 +47,12 @@ defaults write NSGlobalDomain KeyRepeat -int 2
 defaults write NSGlobalDomain InitialKeyRepeat -int 15
 echo "  ✅ Keyboard: fast repeat rate configured"
 
+# ------- Battery -------
+
+# Show battery percentage in the menu bar
+defaults -currentHost write com.apple.controlcenter BatteryShowPercentage -bool true
+echo "  ✅ Battery: percentage is now visible"
+
 # ------- Screenshots -------
 
 # Save screenshots to a specific folder
@@ -57,9 +63,11 @@ echo "  ✅ Screenshots: will be saved to ~/Screenshots"
 # ------- Restart affected apps -------
 
 echo ""
-echo "🔄 Restarting Finder and Dock..."
+echo "🔄 Restarting System UI..."
 killall Finder
 killall Dock
+killall SystemUIServer
+killall ControlCenter
 
 echo ""
 echo "✅ macOS configuration successfully applied."
