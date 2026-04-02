@@ -24,6 +24,8 @@ cask "tableplus"
 cask "thunderbird"
 cask "zoom"
 cask "appcleaner"
+brew "git-flow"
+cask "font-geist-mono"
 
 # ------- API Client (postman or insomnia, chosen in install.sh) -------
 # Automatically added by install.sh

@@ -100,16 +100,23 @@ echo -e "${BOLD}   📦 Application configuration${NC}"
 echo -e "${BOLD}${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-# --- API Client: Postman or Insomnia ---
-ask "Which API client do you prefer? [1] Postman (default) / [2] Insomnia"
+# --- API Client: Postman, Insomnia or both ---
+ask "Which API client do you prefer? [1] Postman (default) / [2] Insomnia / [3] Both"
 read -r api_client_choice
 api_client_choice="${api_client_choice:-1}"
 
+INSTALL_POSTMAN=false
+INSTALL_INSOMNIA=false
+
 if [[ "$api_client_choice" == "2" ]]; then
-    API_CLIENT="insomnia"
+    INSTALL_INSOMNIA=true
     info "Insomnia will be installed"
+elif [[ "$api_client_choice" == "3" ]]; then
+    INSTALL_POSTMAN=true
+    INSTALL_INSOMNIA=true
+    info "Postman and Insomnia will be installed"
 else
-    API_CLIENT="postman"
+    INSTALL_POSTMAN=true
     info "Postman will be installed"
 fi
 echo ""
@@ -174,7 +181,8 @@ info "Generating custom Brewfile..."
 cp "$BREWFILE" "$BREWFILE_TMP"
 
 # Add API Client
-echo "cask \"$API_CLIENT\"" >> "$BREWFILE_TMP"
+[[ "$INSTALL_POSTMAN" == true ]] && echo 'cask "postman"' >> "$BREWFILE_TMP"
+[[ "$INSTALL_INSOMNIA" == true ]] && echo 'cask "insomnia"' >> "$BREWFILE_TMP"
 
 # Add optionals
 [[ "$INSTALL_NOTION" == true ]]       && echo 'cask "notion"'              >> "$BREWFILE_TMP"
